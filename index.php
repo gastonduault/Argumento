@@ -4,12 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-    <title>Argumento</title>
+    <title>Argumento connection</title>
     <link rel="stylesheet" href="css/style.css" />
     <meta name="description" content="Une objection + des arguments = des ventes" />
     <meta name="keywords" content="vente,mot clé, argument,entreprise" />
     <link rel="icon" type="image/png" href="images/logo.png" />
-
 </head>
 
 <body class="page_connection">
@@ -34,24 +33,32 @@
             <input type="submit" value="Valider" class="valider">
 
             <?php
-            $motDePasse="admin";
-            $email="admin";
-            if(isset($_POST['Login']) AND isset($_POST['motPasse'])){
-                //echo '<p class="erreur">veuillez saisir votre email et votre mot de passe</p>'
+            if (isset($_POST['Login']) and isset($_POST['motPasse'])) {
                 try {
                     $bdd = new PDO('mysql:host=localhost;dbname=bdd;charset=utf8', 'root', 'root');
                 } catch (Exception $e) {
                     die('Erreur : ' . $e->getMessage());
                 }
 
+                $email = $_POST['Login'];
+                $motDePasse = $_POST['motPasse'];
                 $tableClient = $bdd->query('SELECT * FROM client');
-                while($donne = $tableClient->fetch()){
-                    
+                while ($donne = $tableClient->fetch()) {
+                    if ((($email == $donne['nom_cli']) or ($email == $donne['mail'])) and $motDePasse == $donne['passeword']) {
+                        $imma=$donne['immatriculation'];
+                        header("location:argumento.php?usr=$imma");
+                    }
                 }
-
                 $test->closeCursor();
             }
             ?>
         </form>
     </main>
 </body>
+
+<!--
+    $email = "dany@gmail.com";
+if ( preg_match ( " /^.+@.+\.[a-zA-Z]{2,}$/ " , $email ) )
+{
+echo "L'adresse eMail est valide";
+-->

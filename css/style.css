@@ -1,4 +1,4 @@
-@font-face{
+@font-face {
     src: url(../font/GeosansLight.ttf);
     font-family: 'Alphakind';
     font-weight: normal;
@@ -20,36 +20,40 @@
     font-style: normal;
 }
 
-body{
+body {
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
 
+
+/*-----------------------------------PAGE CONNECTION -------------------------------*/
 .page_connection {
     background-image: url(../images/fond.jpg);
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-.page_connection header h1{
+
+.page_connection header h1 {
     font-family: Alphakind;
     color: #fff;
     text-align: center;
     margin-top: 3%;
 }
 
-.page_connection header h1 span{
+.page_connection header h1 span,
+.page_principale header h1 span {
     color: #F39B17;
 }
 
-.page_connection header h3{
+.page_connection header h3 {
     color: #fff;
     text-align: center;
     margin-top: 1%;
     font-family: Quicksand;
 }
 
-.valider{
+.valider {
     display: block;
     margin-right: 47%;
     margin-left: 47%;
@@ -62,7 +66,9 @@ body{
     padding: 5px 10px;
 }
 
-
+.page_connection .field input {
+    color: #B5B3B1;
+}
 
 .field__input {
     --uiFieldPlaceholderColor: var(--fieldPlaceholderColor, #B5B3B1);
@@ -102,10 +108,13 @@ CORE STYLES
     display: var(--fieldDisplay, inline-flex);
     position: relative;
     font-size: var(--fieldFontSize, 1rem);
-    margin-left: 40%;
-    margin-left: 40%;
-    margin-top: 7%;
     font-family: Quicksand_bold;
+}
+
+.page_connection .field {
+    margin-top: 7%;
+    margin-left: 40%;
+    margin-left: 40%;
 }
 
 .field__input {
@@ -204,8 +213,108 @@ CORE STYLES
     transition-delay: 0;
 }
 
-.erreur{
+.erreur {
     color: #fff;
     font-family: Quicksand_bold;
     text-align: center;
 }
+
+/*---------------------------PAGE PRINCIPALE----------------------------------------*/
+.page_principale {
+    background-image: url(../images/fond2.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.page_principale h1 {
+    font-family: Alphakind;
+    color: #fff;
+    text-align: center;
+    margin-top: 7%;
+}
+
+.field_v3 .field__label-wrap::after {
+    border: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColorActive);
+    will-change: opacity, height;
+    transition: height .2s ease-out, opacity .2s ease-out;
+}
+
+.field_v3 .field__input:focus~.field__label-wrap::after {
+    height: 100%;
+}
+
+.page_principale .field {
+    margin-top: 10%;
+    width: 400px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+.page_principale .field input {
+    color: #fff;
+}
+
+.burger.active1 input {
+    color: #67D1E6;
+    transition: .5s;
+}
+
+.burger.active1.active2 input {
+    color: #E6D750;
+    transition: .5s;
+}
+
+.burger.active1.active2.active3 input {
+    color: #E63983;
+    transition: .5s;
+}
+
+.page_principale form .argument {
+    color: #fff;
+    width: 500px;
+    text-align: left;
+    font-family: Quicksand;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 2px dashed #F39B17;
+    border-top: 2px dashed #F39B17;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    transition: .5s;
+}
+
+.page_principale form .argument strong{
+    color: #F39B17;
+    margin-right: 20px;
+    font-family: Alphakind;
+}
+
+.page_principale form blockquote{
+    color: #fff;
+    font-family: Quicksand;
+    text-align: center;
+}
+
+.page_principale form blockquote span{
+    color: #F39B17;
+}
+
+.page_principale .compte{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #fff;
+    font-family: Alphakind;
+    display: inline-flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.page_principale .compte img{
+    margin-right: 5px;
+    padding-top: 10px;
+}
+
