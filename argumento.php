@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zxx" lang="zxx">
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -25,7 +25,7 @@
             </label>
             <blockquote>
                 <p>Vous pouvez recherchez jusqu'à <span>3</span> mots-clés</p>
-                <p>Vous devez séparer vos mots-clés par une <span>vigule</span>, </p>
+                <p>Vous devez séparer vos mots-clés par une <span>vigule</span>.</p>
                 <p><em>exemple: trop cher<span>,</span> manque de temps<span>,</span> pas interessé</em></p>
             </blockquote>
             <?php
@@ -36,32 +36,88 @@
                     die('Erreur : ' . $e->getMessage());
                 }
 
-                $mot = $_POST['motCle'];
+                $nombrearg = 0;
 
-                $tableObjection = $bdd->query('SELECT * FROM table_objection');
-                $trouveMot = false;
+                $reste = $_POST['motCle'];
+                $nbMot = substr_count($reste,',');
 
-                while ($donne_objection = $tableObjection->fetch() and !$trouveMot) {
-                    if ($mot == $donne_objection['objection']) {
-                        $indice_objection = $donne_objection['id_objection'];
-                        $trouveMot = true;
-                        $nombrearg = 0;
-                        $tableReponse = $bdd->query('SELECT * from table_reponse natural join jonction where id_objection=' . $indice_objection . '');
-                        while ($donne_reponse = $tableReponse->fetch()) {
-                            $reponse = $donne_reponse['reponse'];
-                            $guillement = "\"";
-                            if ($reponse != null) {
-                                $nombrearg++;
-                                 ?>
-                                <p class="argument">
-                                    <strong>#<?php echo $nombrearg; ?></strong>
-                                    <?php echo $guillement, $reponse, $guillement; ?>
-                                </p>
-                                <?php
-                            }
-                        }
-                        $tableReponse->closeCursor();
+                if(!$nbMot){
+                    $nbMot++;
+                }else if($nbMot>3){
+                    $nbMot=3;
+                }
+                $i=0;
+                $pos = stripos($reste, ',');
+
+                while($i<$nbMot){
+                    if(!$pos){
+                        $mot=$reste;
+                        $i++;
                     }
+                    else{
+                        if((strlen($reste) - $pos)<=2){
+                            $i++;
+                            $mot=substr($reste,0,(strlen($reste)-1));
+                            $pos = stripos($reste, ',');
+                        }
+                        else{
+                            $i++;
+                            if($nbMot<3 && $i<=3){
+                                $nbMot++;
+                            }
+                            $mot=substr($reste,0,(strlen($reste)-$pos-1));
+                        }
+                    }
+
+                    $pos = stripos($mot, ',');
+                    while ($pos != false) {
+                        $mot=substr($mot,0,-1);
+                        $pos = stripos($mot, ',');
+                    }
+
+                    /*if($i==1){
+                        $reste = substr($_POST['motCle'],(stripos($_POST['motCle'], ',')+1));
+                    }else if($i==2){
+                        $reste = substr($reste,(stripos($reste, ',') + 1));      
+                    }*/
+
+                    $reste = substr($reste, (stripos($reste, ',') + 1));  
+                    $reste=ltrim($reste);
+                    $pos = stripos($reste, ',');
+
+                    $mot=ltrim($mot);
+                    $mot=rtrim($mot);
+                    $mot=strtolower($mot);
+
+
+                    $tableObjection = $bdd->query('SELECT * FROM table_objection');
+                    $trouveMot = false;
+                    while ($donne_objection = $tableObjection->fetch() and !$trouveMot) {
+                        if ($mot == $donne_objection['objection']) {
+                            $indice_objection = $donne_objection['id_objection'];
+                            $trouveMot = true;
+                            $tableReponse = $bdd->query('SELECT * from table_reponse natural join jonction where id_objection=' . $indice_objection . '');
+                            while ($donne_reponse = $tableReponse->fetch()) {
+                                $reponse = $donne_reponse['reponse'];
+                                $guillement = "\"";
+                                if ($reponse != null) {
+                                    $nombrearg++;
+                ?>
+                                    <p class="argument">
+                                        <strong>#<?php echo $nombrearg; ?></strong>
+                                        <?php echo $guillement, $reponse, $guillement; ?>
+                                    </p>
+                        <?php
+                                }
+                            }
+                            $tableReponse->closeCursor();
+                        }
+                    }
+                }
+                if (!$trouveMot) {
+                    ?>
+                    <p class="motinccorect">Nous ne connaissons pas encore ce mot clé désolé</p>
+                    <?php
                 }
                 $tableObjection->closeCursor();
             }
@@ -78,17 +134,20 @@
             die('Erreur : ' . $e->getMessage());
         }
         $tableUser = $bdd->query('SELECT * FROM client');
-        $trouveCli=false;
-        while($donne_user=$tableUser->fetch() and !$trouveCli){
-            if($donne_user['immatriculation']==$_GET['usr']){
-                $trouveCli=true;
-                ?>
-                <p><?php echo $donne_user['nom_cli'] ;?></p>
-                <?php
+        $trouveCli = false;
+        while ($donne_user = $tableUser->fetch() and !$trouveCli) {
+            if ($donne_user['immatriculation'] == $_GET['usr']) {
+                $trouveCli = true;
+        ?>
+                <p><?php echo $donne_user['nom_cli']; ?></p>
+        <?php
             }
         }
+        if (!$trouveCli) {
+            header('location:index.php');
+        }
         $tableUser->closeCursor();
-        ?> 
+        ?>
     </div>
 </body>
 

@@ -318,3 +318,8 @@ CORE STYLES
     padding-top: 10px;
 }
 
+.page_principale .motinccorect{
+    color: #fff;
+    font-family: Quicksand;
+    text-align: center;
+}
